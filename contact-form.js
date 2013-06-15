@@ -1,9 +1,18 @@
 if (Meteor.isClient) {
-  Template.hello.greeting = function () {
+
+  // Routes
+
+  Meteor.Router.add({
+    '/': 'home',
+    '/about': 'about',
+    '/contact': 'contact',
+  });
+
+  Template.home.greeting = function () {
     return "Welcome to contact-form.";
   };
 
-  Template.hello.events({
+  Template.home.events({
     'click input' : function () {
       // template data, if any, is available in 'this'
       if (typeof console !== 'undefined')
