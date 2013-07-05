@@ -4,31 +4,40 @@
 
 <body>
 	{{> header}}
-  {{renderPage}}
+  	{{renderPage}}
 </body>
 
 <template name="header">
-	<ul class="nav">
-    <li><a href="{{homeUrl}}">Home</a></li>
-    <li><a href="{{aboutPath}}">About Us</a></li>
-    <li><a href="{{contactPath}}">Contact Us</a></li>
-  </ul>
+	<header class="header-bg">
+		<div class="brand"><a href="{{homeUrl}}">Acme Co.</a>
+		</div>
+		<ul class="nav">
+    		<li><a href="{{aboutPath}}">About</a></li>
+    		<li><a href="{{contactPath}}">Contact</a></li>
+  		</ul>
+	</header>
 </template>
 
 <template name="home">
-  <h1>Hello World!</h1>
+	<div class="container">
+  	<h1>Hello World!</h1>
   
-  {{greeting}}
-  <input type="button" value="Click" />
+  	{{greeting}}
+  	<input type="button" value="Click" />
+  </div>
 </template>
 
 <template name="about">
-	<h1>About Us</h1>
+	<div class="container">
+		<h1>About Us</h1>
+	</div>
 </template>
 
 <template name="contact">
-	<h1>Contact Us</h1>
-	{{> wufoo}}
+	<div class="container">
+		<h1>Contact Us</h1>
+		{{> wufoo}}
+	</div>
 </template>
 
 <template name="wufoo">
@@ -61,16 +70,16 @@
 				<!-- Checkboxes -->
 				<div id="foli3" class="notranslate">
 					<fieldset>
-						<p>(optional)</p>
+						(optional)<br>
 						<label class="checkbox">
 							<input id="Field3" name="Field3" type="checkbox" value="This is option 1" tabindex="3" />
-							This is option 1</label>
+							This is option 1</label><br>
 						<label class="checkbox">
 							<input id="Field4" name="Field4" type="checkbox" value="This is option 2" tabindex="4" />
-							This is option 2</label>
+							This is option 2</label><br>
 						<label class="checkbox">
 							<input id="Field5" name="Field5" type="checkbox" value="This is option 3" tabindex="5" />
-							This is option 3</label>
+							This is option 3</label><br>
 						<label class="checkbox">
 							<input id="Field6" name="Field6" type="checkbox" value="This is option 4" tabindex="6" />
 							This is option 4</label>
@@ -91,7 +100,7 @@
 						name="Field103" 
 						class="textarea input-xlarge" 
 						spellcheck="true" 
-						rows="10" cols="50" 
+						rows="10" cols="40" 
 						tabindex="8" 
 						onkeyup=""
 						></textarea>
