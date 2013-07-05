@@ -17,6 +17,7 @@ if (Meteor.isClient) {
   Template.wufoo.events({
     'click #saveForm' : function (evt, tmpl){
       console.log("Form Input Button Clicked");
+      // First attempts at the Post call. Gave up and decided to focus on the Get first
       //var params = tmpl.find('#idstamp').value
       //var params = EJSON.stringify(formData);
       /*var entries = { 
@@ -37,10 +38,8 @@ if (Meteor.isClient) {
           //Session.set("showBadEmail", true); // From sample project - not used yet
         } else {
           console.log("respJson: ", respJson);
-          
         }
       });
-      evt.preventDefault();
     }
   });
 
@@ -57,19 +56,20 @@ if (Meteor.isServer) {
 
     // Wufoo API Call
   Meteor.methods({
-    postToWufoo: function() { //Need to figure out what 'entries' refers to
+    postToWufoo: function(entries) {
       console.log("API Call Method was made");
-      var apiKey = Meteor.settings.wufooApiKey + ":anypassword@";
       var subdomain = Meteor.settings.wufooSubdomain;
       var formId = Meteor.settings.wufooFormId;
       
-      var url = "https://"+ apiKey + subdomain +".wufoo.com/api/v3/forms/"+ formId +"/entries.json";
+      var url = "https://"+ subdomain +".wufoo.com/api/v3/forms/"+ formId +"/entries.json";
       //synchronous POST
-      var result = Meteor.http.get(url, {timeout:30000});
+      console.log(url);
+      var result = Meteor.http.get(url, {auth: Meteor.settings.wufooApiKey +":footastic", timeout:30000});
+      console.log("result");
       if(result.statusCode==200) {
         var respJson = JSON.parse(result.content);
-        Session.set("entries", result);
         console.log("response received.");
+        console.log(respJson)
         return respJson;
       } else {
         // TODO: Add better error handling
