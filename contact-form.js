@@ -17,21 +17,27 @@ if (Meteor.isClient) {
   Template.wufoo.events({
     'click #saveForm' : function (evt, tmpl){
       console.log("Form Input Button Clicked");
-      // First attempts at the Post call. Gave up and decided to focus on the Get first
-      //var params = tmpl.find('#idstamp').value
-      //var params = EJSON.stringify(formData);
-      /*var entries = { 
-        "Field1": "Static Test",
-        "Field2": "Static Test",
-        "Field3": "Static Test",
-        "Field4": "Static Test",
-        "Field5": "Static Test",
-        "Field6": "Static Test",
-        "Field103": "Static Test"
-      };*/
+      // Need to make pretty for Wufoo: Match fields then structure as JSON
+      // TODO: DRY it up
+      var Field1 = $('#Field1').val();
+      var Field2 = $('#Field2').val();
+      var Field3 = $("#Field3:checked").val();
+      var Field4 = $("#Field4:checked").val();
+      var Field5 = $("#Field5:checked").val();
+      var Field6 = $("#Field6:checked").val();
+      var Field103 = $('#Field103').val();
+      var params = { 
+        "Field1": Field1,
+        "Field2": Field2,
+        "Field3": Field3,
+        "Field4": Field4,
+        "Field5": Field5,
+        "Field6": Field6,
+        "Field103": Field103
+      };
       
       
-      Meteor.call('postToWufoo', function(err, respJson) {
+      Meteor.call('postToWufoo', params, function(err, respJson) {
         if(err) {
           window.alert("Error: " + err.reason);
           console.log("error occured on receiving data on server. ", err );
@@ -43,8 +49,8 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.wufoo.entries = function() {
-    return Session.get("entries") || [];
+  Template.wufoo.params = function() {
+    return Session.get("params") || [];
   }
 }
 
@@ -56,15 +62,18 @@ if (Meteor.isServer) {
 
     // Wufoo API Call
   Meteor.methods({
-    postToWufoo: function(entries) {
+    postToWufoo: function(params) {
       console.log("API Call Method was made");
       var subdomain = Meteor.settings.wufooSubdomain;
       var formId = Meteor.settings.wufooFormId;
-      
       var url = "https://"+ subdomain +".wufoo.com/api/v3/forms/"+ formId +"/entries.json";
       //synchronous POST
       console.log(url);
-      var result = Meteor.http.get(url, {auth: Meteor.settings.wufooApiKey +":footastic", timeout:30000});
+      var result = Meteor.http.post(url, 
+                                    {auth: Meteor.settings.wufooApiKey +":footastic", 
+                                    params: params, 
+                                    timeout:30000
+                                  });
       console.log("result");
       if(result.statusCode==200) {
         var respJson = JSON.parse(result.content);
