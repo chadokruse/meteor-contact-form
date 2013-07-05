@@ -9,7 +9,7 @@
 
 <template name="header">
 	<header class="header-bg">
-		<div class="brand"><a href="{{homeUrl}}">Acme Co.</a>
+		<div class="brand"><a href="{{homeUrl}}">Static Site w Wufoo Contact Form</a>
 		</div>
 		<ul class="nav">
     		<li><a href="{{aboutPath}}">About</a></li>
@@ -41,6 +41,11 @@
 </template>
 
 <template name="wufoo">
+	{{#if formSubmitted }}
+		<div id="thanks">
+			Thanks! We'll get back to you shortly
+		</div>
+	{{else}}
 	<form id="form3" name="form3" class="" autocomplete="off" enctype="multipart/form-data" method="post" novalidate>
 			<div class="pull-left">
 				<!-- First Column -->
@@ -121,4 +126,5 @@
 				<input type="hidden" id="idstamp" name="idstamp" value="8AX42nhmTQP6imos2Pl+3/RZFrjZa3jizBlPqgGrn0U=" />
 			</div>
 		</form>
+		{{/if}}
 </template>

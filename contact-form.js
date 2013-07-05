@@ -12,10 +12,12 @@ if (Meteor.isClient) {
     return "Welcome to contact-form.";
   };
 
- 
+  Template.wufoo.formSubmitted = function() {
+    return Session.get("formSubmitted");
+  }
 
   Template.wufoo.events({
-    'click #saveForm' : function (evt, tmpl){
+    'click #saveForm' : function (evt, tmpl) {
       console.log("Form Input Button Clicked");
       // Need to make pretty for Wufoo: Match fields then structure as JSON
       // TODO: DRY it up
@@ -35,17 +37,20 @@ if (Meteor.isClient) {
         "Field6": Field6,
         "Field103": Field103
       };
-      
-      
-      Meteor.call('postToWufoo', params, function(err, respJson) {
+
+      Meteor.call('postToWufoo', params, function (err, respJson) {
         if(err) {
           window.alert("Error: " + err.reason);
-          console.log("error occured on receiving data on server. ", err );
+          console.log("error occured on receiving data on server. ", err);
           //Session.set("showBadEmail", true); // From sample project - not used yet
         } else {
           console.log("respJson: ", respJson);
         }
+        return false;
       });
+      Session.set("formSubmitted", true);
+      console.log("Form Successfully Submitted");
+      
     }
   });
 
@@ -62,7 +67,7 @@ if (Meteor.isServer) {
 
     // Wufoo API Call
   Meteor.methods({
-    postToWufoo: function(params) {
+    postToWufoo: function (params) {
       console.log("API Call Method was made");
       var subdomain = Meteor.settings.wufooSubdomain;
       var formId = Meteor.settings.wufooFormId;
@@ -90,6 +95,7 @@ if (Meteor.isServer) {
         console.log("Response issue: ", result.statusCode);
         var errorJson = JSON.parse(result.content);
         throw new Meteor.Error(result.statusCode, errorJson.error);
+        return false;
       }
     }
   });
