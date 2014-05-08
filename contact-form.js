@@ -80,7 +80,7 @@ if (Meteor.isServer) {
                                     timeout:30000
                                   });
       console.log("result");
-      if(result.statusCode==200) {
+      if(result.statusCode==200 || result.statusCode==201) {
         var respJson = JSON.parse(result.content);
         console.log("response received.");
         console.log(respJson)
